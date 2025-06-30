@@ -1,0 +1,73 @@
+[project]
+name = "template-streamlit-uv"
+version = "0.0.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "boto3>=1.39.0",
+    "pydantic>=2.11.7",
+    "streamlit>=1.46.0",
+]
+
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ['src']
+include = ['template-streamlit-uv*']
+
+[tool.uv.workspace]
+members = ["template-streamlit-uv"]
+
+[tool.setuptools.package-data]
+"*" = ["data/*", "data/**/*"]
+
+[tool.uv.sources]
+template-streamlit-uv = { workspace = true }
+
+[dependency-groups]
+dev = ["template-streamlit-uv", "pytest>=8.4.1"]
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+version_variables = ["src/template-streamlit-uv/__init__.py:__version__"]
+branch = "main"
+upload_to_pypi = false
+upload_to_release = true
+build_command = "pip install uv && uv build"
+tag_format = "v{version}"
+major_on_zero = false
+allow_zero_version = true
+upload_to_vcs_release = true
+
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = [
+    "build",
+    "chore",
+    "ci",
+    "docs",
+    "feat",
+    "fix",
+    "perf",
+    "style",
+    "refactor",
+    "test",
+]
+minor_tags = ["feat"]
+patch_tags = ["fix", "perf"]
+
+[tool.semantic_release.changelog.default_templates]
+changelog_file = "CHANGELOG.md"
